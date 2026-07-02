@@ -1,0 +1,418 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Hassan Karim — Frontend UI/UX Engineer</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;500;600;700;800&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#0B0E14;
+    --surface:#12161F;
+    --surface-2:#171C27;
+    --line:rgba(237,238,243,0.08);
+    --accent:#6E56F0;
+    --accent-soft:rgba(110,86,240,0.15);
+    --amber:#F0A868;
+    --text:#EDEEF3;
+    --muted:#8A8FA3;
+    --mono:'JetBrains Mono', monospace;
+    --display:'Sora', sans-serif;
+    --body:'Inter', sans-serif;
+  }
+  *{margin:0;padding:0;box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    background:var(--bg);
+    color:var(--text);
+    font-family:var(--body);
+    line-height:1.6;
+    overflow-x:hidden;
+  }
+  a{color:inherit;text-decoration:none;}
+  ::selection{background:var(--accent);color:#fff;}
+
+  /* grid canvas background */
+  #gridCanvas{position:fixed;inset:0;z-index:0;opacity:0.55;}
+
+  .wrap{max-width:1120px;margin:0 auto;padding:0 32px;position:relative;z-index:2;}
+
+  /* NAV */
+  nav{
+    position:sticky;top:0;z-index:50;
+    backdrop-filter:blur(14px);
+    background:rgba(11,14,20,0.72);
+    border-bottom:1px solid var(--line);
+  }
+  nav .wrap{display:flex;align-items:center;justify-content:space-between;padding:18px 32px;}
+  .logo{font-family:var(--display);font-weight:700;font-size:17px;letter-spacing:-0.01em;display:flex;align-items:center;gap:10px;}
+  .logo-mark{width:9px;height:9px;background:var(--accent);border-radius:2px;box-shadow:0 0 12px var(--accent);}
+  .nav-links{display:flex;gap:36px;font-size:14px;color:var(--muted);}
+  .nav-links a:hover{color:var(--text);}
+  .nav-cta{
+    font-family:var(--mono);font-size:12.5px;
+    padding:9px 18px;border:1px solid var(--accent);border-radius:6px;
+    color:var(--accent);transition:all .2s;
+  }
+  .nav-cta:hover{background:var(--accent);color:#fff;}
+  @media(max-width:760px){.nav-links{display:none;}}
+
+  /* HERO */
+  header.hero{padding:110px 0 90px;position:relative;}
+  .eyebrow{
+    font-family:var(--mono);font-size:12.5px;color:var(--amber);
+    display:flex;align-items:center;gap:10px;margin-bottom:26px;letter-spacing:0.02em;
+  }
+  .eyebrow::before{content:'';width:22px;height:1px;background:var(--amber);}
+  h1{
+    font-family:var(--display);font-weight:700;
+    font-size:clamp(38px,5.4vw,64px);
+    line-height:1.06;letter-spacing:-0.02em;
+    max-width:820px;
+  }
+  h1 .hl{color:var(--accent);position:relative;}
+  .hero-sub{
+    margin-top:26px;max-width:560px;color:var(--muted);font-size:17px;
+  }
+  .hero-actions{display:flex;gap:16px;margin-top:42px;flex-wrap:wrap;}
+  .btn-primary{
+    font-family:var(--mono);font-size:13.5px;font-weight:500;
+    background:var(--accent);color:#fff;padding:14px 26px;border-radius:7px;
+    display:inline-flex;align-items:center;gap:8px;transition:transform .2s, box-shadow .2s;
+    box-shadow:0 0 0 rgba(110,86,240,0);
+  }
+  .btn-primary:hover{transform:translateY(-2px);box-shadow:0 10px 30px -8px var(--accent-soft);}
+  .btn-secondary{
+    font-family:var(--mono);font-size:13.5px;
+    border:1px solid var(--line);color:var(--text);padding:14px 26px;border-radius:7px;
+    transition:border-color .2s;
+  }
+  .btn-secondary:hover{border-color:var(--accent);}
+
+  /* stat strip */
+  .stat-strip{
+    display:grid;grid-template-columns:repeat(4,1fr);
+    border-top:1px solid var(--line);border-bottom:1px solid var(--line);
+    margin-top:80px;
+  }
+  .stat{padding:26px 32px;border-right:1px solid var(--line);}
+  .stat:last-child{border-right:none;}
+  .stat-val{font-family:var(--display);font-size:26px;font-weight:700;color:var(--text);}
+  .stat-label{font-family:var(--mono);font-size:11.5px;color:var(--muted);margin-top:6px;text-transform:uppercase;letter-spacing:0.04em;}
+  @media(max-width:760px){.stat-strip{grid-template-columns:repeat(2,1fr);}.stat{border-bottom:1px solid var(--line);}}
+
+  /* SECTION generic */
+  section{padding:100px 0;position:relative;border-top:1px solid var(--line);}
+  .section-head{max-width:600px;margin-bottom:56px;}
+  .section-tag{font-family:var(--mono);font-size:12px;color:var(--accent);letter-spacing:0.04em;text-transform:uppercase;margin-bottom:14px;}
+  h2{font-family:var(--display);font-size:clamp(26px,3.4vw,38px);font-weight:700;letter-spacing:-0.015em;}
+  .section-desc{color:var(--muted);margin-top:14px;font-size:15.5px;}
+
+  /* WHY / approach cards */
+  .grid-3{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--line);border:1px solid var(--line);}
+  .card{background:var(--surface);padding:32px 28px;}
+  .card h3{font-family:var(--display);font-size:18px;margin-bottom:12px;font-weight:600;}
+  .card p{color:var(--muted);font-size:14.5px;}
+  .card .icon{width:36px;height:36px;border:1px solid var(--accent);border-radius:8px;display:flex;align-items:center;justify-content:center;margin-bottom:18px;color:var(--accent);font-family:var(--mono);font-size:14px;}
+  @media(max-width:760px){.grid-3{grid-template-columns:1fr;}}
+
+  /* stack tags */
+  .tag-row{display:flex;flex-wrap:wrap;gap:10px;margin-top:28px;}
+  .tag{
+    font-family:var(--mono);font-size:12.5px;color:var(--text);
+    border:1px solid var(--line);padding:8px 14px;border-radius:20px;
+    background:var(--surface);
+  }
+
+  /* PROCESS - real numbered sequence */
+  .process-list{border-top:1px solid var(--line);margin-top:20px;}
+  .process-item{
+    display:grid;grid-template-columns:70px 1fr;gap:24px;
+    padding:30px 0;border-bottom:1px solid var(--line);
+  }
+  .process-num{font-family:var(--mono);color:var(--accent);font-size:15px;padding-top:2px;}
+  .process-item h4{font-family:var(--display);font-size:18px;margin-bottom:8px;font-weight:600;}
+  .process-item p{color:var(--muted);font-size:14.5px;max-width:560px;}
+
+  /* WORK / proof */
+  .work-grid{display:grid;grid-template-columns:1fr 1fr;gap:20px;}
+  .work-card{
+    background:var(--surface);border:1px solid var(--line);border-radius:10px;
+    padding:30px;transition:border-color .2s, transform .2s;
+  }
+  .work-card:hover{border-color:var(--accent);transform:translateY(-3px);}
+  .work-card .label{font-family:var(--mono);font-size:11.5px;color:var(--amber);text-transform:uppercase;letter-spacing:0.04em;margin-bottom:14px;}
+  .work-card h3{font-family:var(--display);font-size:19px;margin-bottom:10px;}
+  .work-card p{color:var(--muted);font-size:14px;margin-bottom:18px;}
+  .work-link{font-family:var(--mono);font-size:13px;color:var(--accent);display:inline-flex;align-items:center;gap:6px;}
+  .work-link:hover{text-decoration:underline;}
+  @media(max-width:760px){.work-grid{grid-template-columns:1fr;}}
+
+  /* QA advantage */
+  .qa-box{
+    background:var(--surface);border:1px solid var(--line);border-radius:12px;
+    padding:40px;display:grid;grid-template-columns:1fr 1fr;gap:36px;align-items:center;
+  }
+  .qa-box .grid-visual{
+    font-family:var(--mono);font-size:12.5px;color:var(--muted);
+    display:grid;gap:8px;
+  }
+  .qa-row{display:flex;justify-content:space-between;border-bottom:1px dashed var(--line);padding-bottom:8px;}
+  .qa-row span:last-child{color:var(--accent);}
+  @media(max-width:760px){.qa-box{grid-template-columns:1fr;}}
+
+  /* CTA footer */
+  .cta-section{
+    text-align:left;padding:110px 0 60px;
+  }
+  .cta-box{
+    background:linear-gradient(155deg, var(--surface-2), var(--surface));
+    border:1px solid var(--line);border-radius:16px;padding:60px;position:relative;overflow:hidden;
+  }
+  .cta-box h2{max-width:560px;}
+  .cta-box .section-desc{max-width:480px;}
+  .cta-box .hero-actions{margin-top:36px;}
+  footer{padding:30px 0 50px;border-top:1px solid var(--line);}
+  .footer-row{display:flex;justify-content:space-between;align-items:center;color:var(--muted);font-family:var(--mono);font-size:12.5px;flex-wrap:wrap;gap:14px;}
+  .footer-row a:hover{color:var(--accent);}
+
+  @media(max-width:760px){
+    .cta-box{padding:36px 24px;}
+    header.hero{padding:70px 0 60px;}
+    section{padding:70px 0;}
+  }
+</style>
+</head>
+<body>
+
+<canvas id="gridCanvas"></canvas>
+
+<nav>
+  <div class="wrap">
+    <div class="logo"><span class="logo-mark"></span>Hassan Karim</div>
+    <div class="nav-links">
+      <a href="#approach">Approach</a>
+      <a href="#work">Work</a>
+      <a href="#qa">QA Layer</a>
+    </div>
+    <a class="nav-cta" href="#contact">Start Today →</a>
+  </div>
+</nav>
+
+<header class="hero">
+  <div class="wrap">
+    <div class="eyebrow">FRONTEND UI/UX ENGINEER · REACT / NEXT.JS</div>
+    <h1>Features working isn't the finish line — the <span class="hl">interface feeling right</span> is.</h1>
+    <p class="hero-sub">I polish and complete React/Next.js frontends: fixing the spacing that's slightly off, the flow that makes users pause, the layout that breaks on a smaller screen. That's the gap between "it works" and "it feels good to use."</p>
+    <div class="hero-actions">
+      <a class="btn-primary" href="#contact">Book a 15-min walkthrough →</a>
+      <a class="btn-secondary" href="https://hassankhan32.vercel.app/" target="_blank" rel="noopener">View Portfolio</a>
+    </div>
+
+    <div class="stat-strip">
+      <div class="stat"><div class="stat-val">React · Next.js</div><div class="stat-label">Core Stack</div></div>
+      <div class="stat"><div class="stat-val">Redux · Tailwind</div><div class="stat-label">UI &amp; State</div></div>
+      <div class="stat"><div class="stat-val">MERN</div><div class="stat-label">Full-Stack Base</div></div>
+      <div class="stat"><div class="stat-val">Daily</div><div class="stat-label">Async Updates</div></div>
+    </div>
+  </div>
+</header>
+
+<section id="approach">
+  <div class="wrap">
+    <div class="section-head">
+      <div class="section-tag">Why this fits</div>
+      <h2>Built for exactly this kind of work.</h2>
+      <p class="section-desc">Part-time, ongoing, UI/UX-focused. That's not a side project for me — it's the work I'm set up to do well.</p>
+    </div>
+    <div class="grid-3">
+      <div class="card">
+        <div class="icon">01</div>
+        <h3>Stack match</h3>
+        <p>React, Next.js, Redux, and TailwindCSS — the exact tools your app is already built on. No ramp-up time spent learning the codebase's conventions.</p>
+      </div>
+      <div class="card">
+        <div class="icon">02</div>
+        <h3>UX-first eye</h3>
+        <p>I don't just implement designs — I flag friction: inconsistent spacing, unclear states, layouts that don't hold up on mobile, before they become user complaints.</p>
+      </div>
+      <div class="card">
+        <div class="icon">03</div>
+        <h3>Built for long-term</h3>
+        <p>Timezone overlap, consistent async communication, and a habit of treating your product like it's my own — the reliability a part-time, multi-month engagement needs.</p>
+      </div>
+    </div>
+    <div class="tag-row">
+      <span class="tag">TypeScript</span>
+      <span class="tag">TailwindCSS</span>
+      <span class="tag">Redux</span>
+      <span class="tag">Firebase</span>
+      <span class="tag">Node.js / Express</span>
+      <span class="tag">MongoDB</span>
+      <span class="tag">React Native</span>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <div class="section-head">
+      <div class="section-tag">Delivery Plan</div>
+      <h2>How the first two weeks actually go.</h2>
+    </div>
+    <div class="process-list">
+      <div class="process-item">
+        <div class="process-num">01</div>
+        <div>
+          <h4>Audit the current UI</h4>
+          <p>Walk every screen for friction points — inconsistent spacing and typography, broken responsiveness, unclear states — and turn it into a prioritized list, not a vague impression.</p>
+        </div>
+      </div>
+      <div class="process-item">
+        <div class="process-num">02</div>
+        <div>
+          <h4>Fix by impact, not by convenience</h4>
+          <p>The issues users actually hit first get fixed first. Shipped in small, reviewable batches so you're never waiting on one giant PR to see progress.</p>
+        </div>
+      </div>
+      <div class="process-item">
+        <div class="process-num">03</div>
+        <div>
+          <h4>Stay visible</h4>
+          <p>Daily async updates on what moved, plus a weekly call to align on priorities — so you always know exactly where things stand.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="work">
+  <div class="wrap">
+    <div class="section-head">
+      <div class="section-tag">Proof of work</div>
+      <h2>Where to verify this, directly.</h2>
+      <p class="section-desc">Rather than a curated slideshow, here's the actual source — code and shipped screens you can inspect yourself.</p>
+    </div>
+    <div class="work-grid">
+      <div class="work-card">
+        <div class="label">Live Portfolio</div>
+        <h3>hassankhan32.vercel.app</h3>
+        <p>Shipped UI work across React and Next.js projects — layouts, components, and interaction patterns built and deployed end to end.</p>
+        <a class="work-link" href="https://hassankhan32.vercel.app/" target="_blank" rel="noopener">View portfolio ↗</a>
+      </div>
+      <div class="work-card">
+        <div class="label">Source Code</div>
+        <h3>github.com/hasankhn1</h3>
+        <p>Full commit history and repo structure — the fastest way to see actual code quality, not just finished screenshots.</p>
+        <a class="work-link" href="https://github.com/hasankhn1" target="_blank" rel="noopener">View GitHub ↗</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="qa">
+  <div class="wrap">
+    <div class="section-head">
+      <div class="section-tag">Quality Assurance</div>
+      <h2>An extra layer most freelancers don't offer.</h2>
+      <p class="section-desc">Beyond my own testing pass, I have direct access to a dedicated QA engineer for deeper validation before anything ships.</p>
+    </div>
+    <div class="qa-box">
+      <div>
+        <h3 style="font-family:var(--display);font-size:20px;margin-bottom:12px;">Two-layer QA, not one</h3>
+        <p style="color:var(--muted);font-size:14.5px;margin-bottom:16px;">I test every core flow myself — UI consistency, responsiveness, navigation, form validation, API responses, edge cases. For anything higher-stakes, a professional QA engineer runs an independent pass: bug reporting, deeper validation, production-readiness checks.</p>
+        <a class="work-link" href="https://www.upwork.com/freelancers/~01cd86c30f1db1fb1d" target="_blank" rel="noopener">View QA engineer's profile ↗</a>
+      </div>
+      <div class="grid-visual">
+        <div class="qa-row"><span>UI consistency &amp; responsiveness</span><span>Layer 1</span></div>
+        <div class="qa-row"><span>Navigation &amp; interaction flow</span><span>Layer 1</span></div>
+        <div class="qa-row"><span>Form validation &amp; API edge cases</span><span>Layer 1</span></div>
+        <div class="qa-row"><span>Independent QA pass</span><span>Layer 2</span></div>
+        <div class="qa-row"><span>Production-readiness sign-off</span><span>Layer 2</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="cta-section" id="contact">
+  <div class="wrap">
+    <div class="cta-box">
+      <div class="section-tag">Next step</div>
+      <h2>Let's look at your app together — today.</h2>
+      <p class="section-desc">Send over the repo or a staging link, or hop on a 15-minute call. I'll point out the first three things I'd fix, no commitment needed.</p>
+      <div class="hero-actions">
+        <a class="btn-primary" href="https://hassankhan32.vercel.app/" target="_blank" rel="noopener">See the Portfolio →</a>
+        <a class="btn-secondary" href="https://github.com/hasankhn1" target="_blank" rel="noopener">Browse the Code</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap footer-row">
+    <span>Hassan Karim — Frontend UI/UX Engineer</span>
+    <span>Available part-time · Timezone overlap ready</span>
+  </div>
+</footer>
+
+<script>
+// Signature element: a grid of dots that gently drift then snap into aligned rows —
+// a visual metaphor for "polishing" a UI into alignment.
+const canvas = document.getElementById('gridCanvas');
+const ctx = canvas.getContext('2d');
+let w, h, dots = [];
+const SPACING = 46;
+
+function resize(){
+  w = canvas.width = window.innerWidth;
+  h = canvas.height = Math.max(document.body.scrollHeight, window.innerHeight);
+  buildDots();
+}
+
+function buildDots(){
+  dots = [];
+  const cols = Math.ceil(w / SPACING) + 2;
+  const rows = Math.ceil(h / SPACING) + 2;
+  for(let i=0;i<cols;i++){
+    for(let j=0;j<rows;j++){
+      const tx = i*SPACING;
+      const ty = j*SPACING;
+      dots.push({
+        tx, ty,
+        x: tx + (Math.random()-0.5)*30,
+        y: ty + (Math.random()-0.5)*30,
+        phase: Math.random()*Math.PI*2,
+        speed: 0.4 + Math.random()*0.6
+      });
+    }
+  }
+}
+
+let t = 0;
+function draw(){
+  t += 0.006;
+  ctx.clearRect(0,0,w,h);
+  const scrollFactor = Math.min(window.scrollY / 600, 1);
+
+  for(const d of dots){
+    const wobble = Math.sin(t*d.speed + d.phase) * (1-scrollFactor) * 10;
+    const x = d.tx + wobble * 0.6;
+    const y = d.ty + Math.cos(t*d.speed*0.8 + d.phase) * (1-scrollFactor) * 6;
+
+    ctx.beginPath();
+    ctx.arc(x, y, 1.3, 0, Math.PI*2);
+    ctx.fillStyle = 'rgba(110,86,240,' + (0.18 + 0.1*Math.sin(t+d.phase)) + ')';
+    ctx.fill();
+  }
+  requestAnimationFrame(draw);
+}
+
+window.addEventListener('resize', resize);
+window.addEventListener('scroll', ()=>{});
+resize();
+draw();
+</script>
+
+</body>
+</html>
